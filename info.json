@@ -1,0 +1,11 @@
+{
+  "name": "TeamMod",
+  "version": "0.1.7",
+  "title": "Team Mod",
+  "author": "TheOverwatcher",
+  "contact": "",
+  "homepage": "",
+  "factorio_version": "0.16",
+  "dependencies": ["base >= 0.16"],
+  "description": "This mod enables separate teams for fun competition."
+}
