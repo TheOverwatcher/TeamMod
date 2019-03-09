@@ -205,7 +205,6 @@ function on_player_created(event)
     player.get_inventory(defines.inventory.chest).clear();
     player.get_inventory(defines.inventory.player_guns).clear();
     player.get_inventory(defines.inventory.player_main).clear();
-    player.get_inventory(defines.inventory.player_quickbar).clear();
 	
 	if global.DEBUG then
 		PrintToAllPlayers({'debug.exit-method', "event_functions:on_player_created"})
@@ -607,8 +606,6 @@ function getEventName(event)
         return 'on_player_mined_tile';
     elseif event == defines.events.on_player_placed_equipment then
         return 'on_player_placed_equipment';
-    elseif event == defines.events.on_player_quickbar_inventory_changed then
-        return 'on_player_quickbar_inventory_changed';
     elseif event == defines.events.on_player_removed_equipment then
         return 'on_player_removed_equipment';
     elseif event == defines.events.on_player_respawned then

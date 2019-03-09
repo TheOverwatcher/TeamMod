@@ -21,8 +21,8 @@ ConfigurationGui.steps = {
 			table.each(global.forcesData, function(forceData)
                 local forceFrame = frame.add {
                     name = 'force_frame_' .. forceData.name,
-                    type = 'flow',
-                    direction = 'horizontal'
+                    type = 'scroll-pane',
+                    direction = 'vertical'
                 }
                 forceFrame.add {
                     type = 'label',
