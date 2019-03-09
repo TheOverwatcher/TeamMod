@@ -309,8 +309,8 @@ function on_gui_click(event)
         if player.gui.center.create_force ~= nil and player.gui.center.create_force.valid then
             if player.gui.center.create_force.caption ~= nil then
                 global.forcesData[player.gui.center.create_force.caption] = nil;
+            global.forceData = ConfigurationGui.steps.teams.getForceData(player.gui.center.create_force.force_detail);
             end
-            global.forceData = ConfigurationGui.steps.teams.getForceData(player.gui.center.create_force);
             if global.forceData.cName ~= '' then
                 global.forcesData[global.forceData.cName] = global.forceData;
                 player.gui.center.create_force.destroy();

@@ -17,7 +17,7 @@ ConfigurationGui.steps = {
 			
 			--create the frame
 			local frame = ConfigurationGui:createFrame(player.gui.center, 'teams_gui', { 'resources-gui.create-gui-caption' });
-						
+			
 			table.each(global.forcesData, function(forceData)
                 local forceFrame = frame.add {
                     name = 'force_frame_' .. forceData.name,
@@ -63,27 +63,16 @@ ConfigurationGui.steps = {
             if forceData.cName ~= '' then
                 frame.caption = forceData.cName;
             end
-            for k, v in pairs({
-                'name',
-                'title',
-                'cName'
-            }) do
-                local flow = frame.add {
-                    type = 'flow',
-                    name = "force_" .. v,
-                    direction = 'vertical'
-                }
-                flow.add {
-                    type = "label",
-                    caption = { 'resources-gui.force-' .. v .. '-caption' }
-                }
-                flow.add {
-                    name = "textfield",
-                    type = "textfield",
-                    text = forceData[v],
-                }
-            end
-            color = frame.add {
+			
+			--Add scroll to overall frame.
+			local scrollPane = ConfigurationGui:createScrollPane(frame, 'force_details', 'horizontal', "")
+			
+			local flow = scrollPane.add { type = 'flow', name = "force_name", direction = 'vertical'}
+			
+			flow.add { type = "label", caption = { 'resources-gui.force-name-caption' } }
+			flow.add { type = "textfield", name = "textfield", text = forceData.title }
+			
+            color = scrollPane.add {
                 type = 'frame',
                 direction = 'vertical',
                 name = 'color',
@@ -92,32 +81,64 @@ ConfigurationGui.steps = {
 
             local forceColor = ConfigurationGui:colorToRgb(forceData.color)
             for k, v in pairs(forceColor) do
-                local flow = color.add {
-                    type = 'flow',
+                local colorTable = color.add {
+                    type = 'table',
                     direction = 'horizontal',
-                    name = k
+                    name = k,
+					column_count = 2,
+					draw_vertical_lines = true,
+					draw_horizontal_lines = true,
+					draw_horizontal_lines_after_headers = true,
                 }
-                flow.add {
-                    type = "label",
+				
+				--Trying to determine even spacing for table columns
+				colorTable.style.horizontal_spacing = 20
+				colorTable.style.vertical_spacing = 10
+				colorTable.style.maximal_height = 500
+				colorTable.style.maximal_width = 400
+				
+                local nameFrame = colorTable.add {
+                    type = 'frame',
+					direction = 'horizontal',
+				}
+				
+				nameFrame.add {
+					type = "label",
                     caption = { 'resources-gui.force-color-' .. k .. '-caption' }
-                }
-                flow.add {
-                    name = "textfield",
-                    text = v,
-                    type = "textfield",
+                
+				}
+				
+				local maxVal = 255
+				
+				PrintToAllPlayers({"K, V pair: " .. k .. ", " .. v})
+				
+				if k == 'a' then
+					maxVal = 1
+				end
+				
+				PrintToAllPlayers({"Max value is: " .. maxVal})
+				
+                local slider = colorTable.add {
+                    name = "slider",
+                    text = v,	
+                    type = "slider",
+					minimum_value = 0,
+					maximum_value = maxVal,
+					value = v,
                 }
             end
-
-            frame.add {
-                type = 'button',
-                name = 'force_cancel',
-                caption = { 'resources-gui.force-cancel-caption' }
-            }
-
-            frame.add {
+			
+			-- Add to parent frame outside of scrolling
+			
+            local button = frame.add {
                 type = 'button',
                 name = 'force_save',
                 caption = { 'resources-gui.force-save-caption' }
+            }
+			local button = frame.add {
+                type = 'button',
+                name = 'force_cancel',
+                caption = { 'resources-gui.force-cancel-caption' }
             }
 			if global.DEBUG then
 				PrintToAllPlayers({'debug.exit-method', "ConfigurationGui.steps.teams:createForceGuiWithData"})
@@ -141,13 +162,13 @@ ConfigurationGui.steps = {
 		getForceData = function(frame)
             return {
                 name = frame.force_name.textfield.text,
-                title = frame.force_title.textfield.text,
-                cName = frame.force_cName.textfield.text,
+                title = frame.force_name.textfield.text,
+                cName = frame.force_name.textfield.text,
                 color = ConfigurationGui:rgbToColor({
-                    r = frame.color.r.textfield.text,
-                    g = frame.color.g.textfield.text,
-                    b = frame.color.b.textfield.text,
-                    a = frame.color.a.textfield.text
+                    r = frame.color.r.slider.slider_value,
+                    g = frame.color.g.slider.slider_value,
+                    b = frame.color.b.slider.slider_value,
+                    a = frame.color.a.slider.slider_value
                 })
             }
         end,
@@ -384,8 +405,18 @@ function ConfigurationGui:createFrame(parent, name, caption)
     return parent.add {
         type = 'frame',
         name = name,
-        direction = 'vertical',
+        direction = 'horizontal',
         caption = caption
+    }
+end
+
+function ConfigurationGui:createScrollPane(parent, name, direction, caption)
+    return parent.add {
+        type = 'scroll-pane',
+        name = name,
+        direction = direction,
+        caption = caption,
+		vertical_scroll_policy = "always"
     }
 end
 
