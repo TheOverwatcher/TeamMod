@@ -94,12 +94,11 @@ ConfigurationGui.steps = {
 				--Trying to determine even spacing for table columns
 				colorTable.style.horizontal_spacing = 20
 				colorTable.style.vertical_spacing = 10
-				colorTable.style.maximal_height = 500
-				colorTable.style.maximal_width = 400
 				
                 local nameFrame = colorTable.add {
                     type = 'frame',
 					direction = 'horizontal',
+					
 				}
 				
 				nameFrame.add {
@@ -110,13 +109,13 @@ ConfigurationGui.steps = {
 				
 				local maxVal = 255
 				
-				PrintToAllPlayers({"K, V pair: " .. k .. ", " .. v})
+				PrintToAllPlayers({'debug.key-value-pair-msg',k,v})
 				
 				if k == 'a' then
 					maxVal = 1
 				end
 				
-				PrintToAllPlayers({"Max value is: " .. maxVal})
+				PrintToAllPlayers({'debug.max-amount-msg',maxVal})
 				
                 local slider = colorTable.add {
                     name = "slider",
@@ -405,7 +404,7 @@ function ConfigurationGui:createFrame(parent, name, caption)
     return parent.add {
         type = 'frame',
         name = name,
-        direction = 'horizontal',
+        direction = 'vertical',
         caption = caption
     }
 end

@@ -36,6 +36,12 @@ function tick_all_helper_if_valid(tick)
 end
 
 function register_tick_helper_if_valid(name, tick_helper, tick_interval, if_valid)
+	if global.DEBUG then
+		PrintToAllPlayers({'debug.enter-method', "tick_helper:register_tick_helper_if_valid"})
+		if(if_valid == true) then
+			PrintToAllPlayers({"if_valid is true"})
+		end
+	end
     _tick_helper_v[name] = {
         tick_helper=tick_helper,
         name = name,
@@ -44,6 +50,9 @@ function register_tick_helper_if_valid(name, tick_helper, tick_interval, if_vali
         next_tick = game.tick + global.TICK_INTERVAL,
         running = false
     }
+	if global.DEBUG then
+		PrintToAllPlayers({'debug.exit-method', "tick_helper:register_tick_helper_if_valid"})
+	end
 end
 function destroy_tick_helper_if_valid(name)
     _tick_helper_v[name] = nil;

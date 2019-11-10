@@ -36,6 +36,9 @@ function DistanceSqr(p1, p2)
 end
 
 function is_area_charted(area, surface, force)
+	if global.DEBUG then
+		PrintToAllPlayers({'debug.enter-method', "utilities:is_area_charted"})
+	end
     if not force then
         force = 'player';
     end
@@ -44,9 +47,15 @@ function is_area_charted(area, surface, force)
             return false;
         end
     end;
+	if global.DEBUG then
+		PrintToAllPlayers({'debug.exit-method', "utilities:is_area_charted"})
+	end
     return true;
 end
 function area_to_chunks(area)
+	if global.DEBUG then
+		PrintToAllPlayers({'debug.enter-method', "utilities:area_to_chunks"})
+	end
     local chunks = {};
 
     local a = Area.to_table(area);
@@ -59,7 +68,12 @@ function area_to_chunks(area)
             table.insert(chunks, {x,y})
         end
     end
-
+	
+	if global.DEBUG then
+		PrintToAllPlayers({'debug.exit-method', "utilities:area_to_chunks"})
+		PrintToAllPlayers({'debug.variable-information','chunks', chunks.length})
+	end
+	
     return chunks;
 end
 

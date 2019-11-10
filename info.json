@@ -5,7 +5,7 @@
   "author": "TheOverwatcher",
   "contact": "",
   "homepage": "",
-  "factorio_version": "0.17",
+  "factorio_version": "0.17.76",
   "dependencies": ["base >= 0.17"],
   "description": "This mod enables separate teams for fun competition."
 }

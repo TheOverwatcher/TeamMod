@@ -35,7 +35,7 @@ function couldJoinIntoForce(forceName)
     table.each(global.forcesData, function(data)
         global.c = 0;
         table.each(game.players, function(player)
-            if data.cName == player.force.name then c = c + 1 end
+            if data.cName == player.force.name then global.c = global.c + 1 end
         end)
         global.check[data.cName] = global.c;
         if global.lastValue == global.c then -- check if all teams have the same amount of players

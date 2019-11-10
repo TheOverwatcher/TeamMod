@@ -80,7 +80,7 @@ function triggerTeamsEnabling()
     global.checked_teams = {};
     global.if_valid = function(tick)
 		if global.DEBUG_ALL and global.forcesData ~= nil  then
-			PrintToAllPlayers("ForcesData isn't null")
+			PrintToAllPlayers('debug.forces-data-not-null')
 		end
         for _, data in pairs(global.forcesData) do
             if global.checked_teams[data.name] == nil then
@@ -92,8 +92,13 @@ function triggerTeamsEnabling()
                 global.checked_teams[data.name] = true;
             end
         end
+		
         return true;
     end
+	
+	if global.if_valid == true then
+		PrintToAllPlayers({"if_valid true"})
+	end
 	
     global.tick_helper = function(tick)
         table.each(global.forcesData, function(data)
@@ -102,10 +107,10 @@ function triggerTeamsEnabling()
         end)
         setTeamsEnabled();
         table.each(game.players, function(player)
-            make_team_option(player);
+			make_team_option(player);
         end)
     end
-    register_tick_helper_if_valid('CREATE_TEAMS', global.tick_helper, global.tick_interval, global.if_valid);
+    register_tick_helper_if_valid('CREATE_TEAMS', global.tick_helper, global.TICK_INTERVAL, global.if_valid);
 	if global.DEBUG then
 		PrintToAllPlayers({'debug.exit-method', "team_functions:triggerTeamsEnabling"})
 	end

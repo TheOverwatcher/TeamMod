@@ -5,8 +5,8 @@
 --	3) create local references to tables stored in the global table
 
 function on_load(event)
-	global.DEBUG = false;
-	global.DEBUG_ALL = false;
+	global.DEBUG = true;
+	global.DEBUG_ALL = true;
 		
 	-- global information modified from initial config
 	if global.forcesData == nil then
@@ -86,7 +86,7 @@ end
 
 -- NO DEBUG. INIT WONT HAVE PLAYERS. Setting variable to test for init failure.
 function on_init(event)
-	global.DEBUG = false;
+	global.DEBUG = true;
 	global.DEBUG_ALL = false;
 	
 	make_lobby()
@@ -189,7 +189,7 @@ function on_player_created(event)
 	
 	--If the host player and configuration was not set.
 	if event.player_index == 1 and not isConfigWritten() then
-		PrintToAllPlayers('Creating configuration gui');
+		PrintToAllPlayers('debug.create-gui-msg');
         ConfigurationGui:createConfigurationGui(player);
 	end
 	
@@ -201,10 +201,10 @@ function on_player_created(event)
 		PrintToAllPlayers({"resources.teams-have-not-been-set-msg"})
 	end
 	
-	player.get_inventory(defines.inventory.player_ammo).clear();
+	player.get_inventory(defines.inventory.character_ammo).clear();
     player.get_inventory(defines.inventory.chest).clear();
-    player.get_inventory(defines.inventory.player_guns).clear();
-    player.get_inventory(defines.inventory.player_main).clear();
+    player.get_inventory(defines.inventory.character_guns).clear();
+    player.get_inventory(defines.inventory.character_main).clear();
 	
 	if global.DEBUG then
 		PrintToAllPlayers({'debug.exit-method', "event_functions:on_player_created"})

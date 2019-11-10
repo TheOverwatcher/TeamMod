@@ -1,22 +1,35 @@
 function MM_set_spawns(data, message)
+	if global.DEBUG then
+		PrintToAllPlayers({'debug.enter-method', "map_helpers:MM_set_spawns"})
+	end
     global.s = game.surfaces["nauvis"]
     -- kill trees and enemy units
     if message then
-        PrintToAllPlayers('kill enemy');
+        PrintToAllPlayers('resources.kill-enemy');
     end
 
-    for _, enemyName in ipairs({"spitter-spawner","biter-spawner","small-worm-turret","medium-worm-turret","big-worm-turret"}) do
+	if global.DEBUG then
+		PrintToAllPlayers({"First for"})
+	end
+	
+    for _, enemyName in ipairs({"spitter-spawner","biter-spawner","small-worm-turret","medium-worm-turret","big-worm-turret", "behemoth-worm-turret"}) do
         for _, entity in ipairs(global.s.find_entities_filtered({area = SquareArea( data.cords, global.big_distance), name = enemyName})) do
             entity.destroy()
         end
     end
+	if global.DEBUG then
+		PrintToAllPlayers({"second for"})
+	end
     for k, entity in pairs(global.s.find_enemy_units(data.cords, global.big_distance)) do
         entity.destroy()
     end
 
     if message then
-        PrintToAllPlayers('kill trees');
+        PrintToAllPlayers('resources.kill-trees');
     end
+	if global.DEBUG then
+		PrintToAllPlayers({"Third for"})
+	end
     for _, enemyName in ipairs({"dead-dry-hairy-tree","dead-grey-trunk","dead-tree","dry-hairy-tree","dry-tree","green-coral","tree-01","tree-02","tree-02-red","tree-03","tree-04","tree-05","tree-06","tree-06-brown","tree-07","tree-08","tree-08-brown","tree-08-red","tree-09","tree-09-brown","tree-09-red"}) do
         for _, entity in ipairs(global.s.find_entities_filtered({area = SquareArea( data.cords, math.floor(global.points.startingAreaRadius*1.25)), name = enemyName})) do
             entity.destroy()
@@ -24,36 +37,69 @@ function MM_set_spawns(data, message)
     end
     global.attempts = 0
     global.non_colliding = nil;
+	if global.DEBUG then
+		PrintToAllPlayers({"First repeat"})
+	end
     repeat
-        global.non_colliding = global.s.find_non_colliding_position('player',data.cords, global.points.startingAreaRadius, 4)
+		if global.DEBUG then
+			PrintToAllPlayers({'debug.variable-information', "global.non_colliding", global.non_colliding})
+			PrintToAllPlayers({'debug.variable-information', "global.attempts", global.attempts})
+			PrintToAllPlayers({'debug.variable-information', "data.cords", data.cords})
+			PrintToAllPlayers({'debug.variable-information', "global.points.startingAreaRadius",global.points.startingAreaRadius})
+		end
+        global.non_colliding = global.s.find_non_colliding_position('character',data.cords, global.points.startingAreaRadius, 4)
+		if global.DEBUG then
+			PrintToAllPlayers({'debug.variable-information', "global.non_colliding", global.non_colliding})
+			PrintToAllPlayers({'debug.variable-information', "global.attempts", global.attempts})
+		end
         global.attempts = global.attempts + 1
     until (global.attempts == 20 or global.non_colliding ~= nil)
+	if global.DEBUG then
+		PrintToAllPlayers({"After until"})
+	end
     if global.non_colliding == nil then
-        PrintToAllPlayers("Map unsutitable, please restart ("..data.title..")")
+        PrintToAllPlayers('resources.map-unsutitable',data.title)
         game.forces[data.cName].set_spawn_position({ data.cords.x, data.cords.y }, global.s);
     else
         game.forces[data.cName].set_spawn_position({ global.non_colliding.x, global.non_colliding.y }, global.s);
     end
 
+	if global.DEBUG then
+		PrintToAllPlayers({"non_colliding"})
+	end
     if global.non_colliding ~= nil then
         if message then
-            PrintToAllPlayers('kill more enemies');
+            PrintToAllPlayers('resources.kill-more-enemies');
         end
+		if global.DEBUG then
+			PrintToAllPlayers({"Destroy buildings"})
+		end
 
         -- destroy enemy buildings
-        for _, enemyName in ipairs({"spitter-spawner","biter-spawner","small-worm-turret","medium-worm-turret","big-worm-turret"}) do
+        for _, enemyName in ipairs({"spitter-spawner","biter-spawner","small-worm-turret","medium-worm-turret","big-worm-turret", "behemoth-worm-turret"}) do
             for _, entity in ipairs(global.s.find_entities_filtered({area = SquareArea( global.non_colliding, global.big_distance), name = enemyName})) do
                 entity.destroy()
             end
         end
+		
+		if global.DEBUG then
+			PrintToAllPlayers({"Destroy units"})
+		end
         -- destroy enemy units
         for k, entity in pairs(global.s.find_enemy_units(global.non_colliding, global.big_distance)) do
             entity.destroy()
         end
     end
+	
+	if global.DEBUG then
+		PrintToAllPlayers({'debug.exit-method', "map_helpers:MM_set_spawns"})
+	end
 end
 
 function MM_set_starting_area(data)
+	if global.DEBUG then
+		PrintToAllPlayers({'debug.enter-method', "map_helpers:MM_set_starting_area"})
+	end
 
     global.s = game.surfaces["nauvis"]
     global.s.set_tiles {
@@ -79,18 +125,33 @@ function MM_set_starting_area(data)
             end
         end
     end
+	if global.DEBUG then
+		PrintToAllPlayers({'debug.exit-method', "map_helpers:MM_set_starting_area"})
+	end
 end
 
 
 function MM_create_force(data)
+	if global.DEBUG then
+		PrintToAllPlayers({'debug.enter-method', "map_helpers:MM_create_force"})
+	end
     game.create_force(data.cName);
     MM_chart(data);
+	if global.DEBUG then
+		PrintToAllPlayers({'debug.exit-method', "map_helpers:MM_create_force"})
+	end
 end
 
 function MM_chart(data)
+	if global.DEBUG then
+		PrintToAllPlayers({'debug.enter-method', "map_helpers:MM_chart"})
+	end
     global.areabig_distance = round_area_to_chunk_save(SquareArea(data.cords, global.big_distance));
     game.forces["player"].chart('nauvis', global.areabig_distance)
     game.forces[data.cName].chart('nauvis', global.areabig_distance)
+	if global.DEBUG then
+		PrintToAllPlayers({'debug.exit-method', "map_helpers:MM_chart"})
+	end
 end
 
 
