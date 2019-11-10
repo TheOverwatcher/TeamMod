@@ -5,8 +5,8 @@
 --	3) create local references to tables stored in the global table
 
 function on_load(event)
-	global.DEBUG = true;
-	global.DEBUG_ALL = true;
+	global.DEBUG = false;
+	global.DEBUG_ALL = false;
 		
 	-- global information modified from initial config
 	if global.forcesData == nil then
@@ -86,7 +86,7 @@ end
 
 -- NO DEBUG. INIT WONT HAVE PLAYERS. Setting variable to test for init failure.
 function on_init(event)
-	global.DEBUG = true;
+	global.DEBUG = false;
 	global.DEBUG_ALL = false;
 	
 	make_lobby()
